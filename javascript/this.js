@@ -117,3 +117,62 @@ button.addEventListener("click", function () {
 button.addEventListener("click", () => {
     console.log(this); // `this` refers to the global object or undefined in strict mode
 });
+
+
+/**
+ * 7. In Classes
+ * In class methods, this refers to the instance of the class.
+ */
+
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+    greet() {
+        console.log(`Hello, ${this.name}!`);
+    }
+}
+const person = new Person("Alice");
+person.greet(); // Output: Hello, Alice!
+
+// However, if a method is detached, this might lose its context.
+// To avoid this, you can bind the method in the constructor or use an arrow function.
+
+const greetFunction0 = person.greet;
+greetFunction(); // Output: Hello, undefined!
+
+
+/**
+ * 8. SetTimeout and this
+ * Inside setTimeout, this can behave unexpectedly.
+ */
+
+const obj = {
+    name: "Alice",
+    greet() {
+        setTimeout(function () {
+            console.log(`Hello, ${this.name}`);
+        }, 1000);
+    }
+};
+obj.greet(); // Output: Hello, undefined (or error in strict mode)
+
+// To fix this, use an arrow function or explicitly bind this.
+
+const obj0 = {
+    name: "Alice",
+    greet() {
+        setTimeout(() => {
+            console.log(`Hello, ${this.name}`);
+        }, 1000);
+    }
+};
+obj0.greet(); // Output: Hello, Alice!
+
+/*
+Key Takeaways:
+	•	this depends on how the function is called, not where it’s declared.
+	•   Arrow functions inherit this from the enclosing context, while regular functions determine this at runtime.
+	•	Explicit binding methods like call, apply, and bind allow control over this.
+	•	Losing context often happens when methods are passed as callbacks. Using bind or arrow functions can help retain context.
+*/
